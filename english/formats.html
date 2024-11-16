@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English note format</title>
+    <style>
+        /* Dark Mode Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+        h2, h3 {
+            color: #b3b3b3;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        button {
+            display: inline-block;
+            background-color: #6015bd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button:hover {
+            background-color: #802bd5;
+        }
+        button:focus {
+            outline: none;
+        }
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #333;
+            padding: 10px;
+            font-weight: bold;
+            border-bottom: 1px solid #555;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .flow-display {
+            font-size: 14px;
+            color: #a0a0a0;
+        }
+        .section {
+            display: none;
+            margin-top: 20px;
+        }
+        .visible {
+            display: block;
+        }
+        ul li {
+            color: #b3b3b3;
+        }
+        .restart-btn {
+            margin-top: 20px;
+            background-color: #ff3333;
+        }
+        .restart-btn:hover {
+            background-color: #b61727;
+        }
+
+        /* Responsive styling */
+        @media only screen and (max-width: 768px) {
+            .container {
+                padding: 20px;
+                max-width: 90%;
+            }
+            button {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            .container {
+                padding: 15px;
+                max-width: 95%;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            h2, h3 {
+                font-size: 16px;
+            }
+            button {
+                padding: 10px;
+                font-size: 13px;
+            }
+        }
+    </style>
+    <script>
+        let flow = [];
+
+        function showSection(id, question) {
+            // Hide the currently visible section (if any)
+            const currentSection = document.querySelector('.section.visible');
+            if (currentSection) {
+                currentSection.classList.remove('visible');
+            }
+
+            // Show the next relevant section
+            document.getElementById(id).classList.add('visible');
+
+            // Add the question to the flow array and update the display
+            flow.push(question);
+            updateFlowDisplay();
+        }
+
+        function updateFlowDisplay() {
+            const flowDisplay = document.getElementById('flow-display');
+            flowDisplay.innerHTML = "Flow: " + flow.join(' > ');
+            // Show result label if the flow is complete
+            if (flow.length === 2) {
+                const resultLabel = document.createElement('div');
+                resultLabel.innerText = getResultLabel();
+                flowDisplay.appendChild(resultLabel);
+            }
+        }
+
+        function getResultLabel() {
+            const lastQuestion = flow[flow.length - 1];
+            if (lastQuestion.includes('No')) {
+                return '= Multi-day Poetry/Story format';
+            } else {
+                return '= Single-day Poetry/Story format';
+            }
+        }
+
+        function resetFlow() {
+            flow = [];
+            const flowDisplay = document.getElementById('flow-display');
+            flowDisplay.innerHTML = 'Flow: ';  // Reset the flow display
+
+            // Hide all sections and show the start section
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('visible');
+            });
+            document.getElementById('start').classList.add('visible');
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Lesson Plan</h1>
+        <div id="flow-display" class="header flow-display">Flow: </div>
+        
+        <div id="start" class="section visible">
+            <h2>Hey!</h2>
+            <h3>So... is the lesson about poetry?</h3>
+            <button onclick="showSection('yes-poetry', 'Was it a poetry? > Yes')">Yeah, it was poetry!</button>
+            <button onclick="showSection('no-poetry', 'Was it a poetry? > No')">Nope, not poetry.</button>
+        </div>
+
+        <!-- If the answer is Yes -->
+        <div id="yes-poetry" class="section">
+            <h2>Cool! Did you manage to wrap it all up in one day?</h2>
+            <button onclick="showSection('yes-day1', 'Was it finished in one day? > Yes')">Yes, all in one day!</button>
+            <button onclick="showSection('no-day2', 'Was it finished in one day? > No')">No, it went into another day.</button>
+        </div>
+
+        <!-- Yes to finishing in one day -->
+        <div id="yes-day1" class="section">
+            <h3>Awesome! Here’s your note format for a one-day poetry lesson:</h3>
+            <ul>
+                <li>Learning Objectives</li>
+                <li>Brainstorm</li>
+                <li>Author's Note</li>
+                <li>Learning Points</li>
+                <li>Activity 1, 2, and 3</li>
+                <li>Poetry Devices</li>
+                <li>Poetry Analysis</li>
+                <li>Message of the poetry/story</li>
+            </ul>
+            <button class="restart-btn" onclick="resetFlow()">Restart</button>
+        </div>
+
+        <!-- No, there was a Day 2 -->
+        <div id="no-day2" class="section">
+            <h3>Got it! Since the lesson stretched over a day, here's the format:</h3>
+            <ul>
+                <li>Learning Objectives (day 1)</li>
+                <li>Brainstorm</li>
+                <li>Author's Note</li>
+                <li>Learning Points (day 1)</li>
+                <li>Activity 1, 2, 3</li>
+                <li>Learning Objectives (day 2)</li>
+                <li>Poetry Devices</li>
+                <li>Learning Points (day 2)</li>
+                <li>Poetry Analysis</li>
+                <li>Message of the poetry/story</li>
+            </ul>
+            <button class="restart-btn" onclick="resetFlow()">Restart</button>
+        </div>
+
+        <!-- If the answer is No to being poetry -->
+        <div id="no-poetry" class="section">
+            <h2>No worries! Was the story or lesson done in one day?</h2>
+            <button onclick="showSection('yes-day2-nopoetry', 'Was it a poetry? > No > Was it finished in one day? > Yes')">Yep, all in one day!</button>
+            <button onclick="showSection('no-day2-nopoetry', 'Was it a poetry? > No > Was it finished in one day? > No')">Nope, took more than one day.</button>
+        </div>
+
+        <!-- Yes to finishing in one day (No Poetry) -->
+        <div id="yes-day2-nopoetry" class="section">
+            <h3>Perfect! For a one-day non-poetry lesson, use this format:</h3>
+            <ul>
+                <li>Learning Objectives</li>
+                <li>Brainstorm</li>
+                <li>Author's Note</li>
+                <li>Learning Points</li>
+                <li>Activity 1, 2, 3</li>
+                <li>Character Analysis</li>
+                <li>Message of the story</li>
+            </ul>
+            <button class="restart-btn" onclick="resetFlow()">Restart</button>
+        </div>
+
+        <!-- No, there was a Day 2 (No Poetry) -->
+        <div id="no-day2-nopoetry" class="section">
+            <h3>Looks like it took more days huh? Here’s your format for that:</h3>
+            <ul>
+                <li>Learning Objectives (day 1)</li>
+                <li>Brainstorm</li>
+                <li>Author's Note</li>
+                <li>Learning Points (day 1)</li>
+                <li>Activity 1, 2, 3</li>
+                <li>Learning Objectives (day 2)</li>
+                <li>Learning Points (day 2)</li>
+                <li>Character Analysis</li>
+                <li>Message of the story</li>
+            </ul>
+            <button class="restart-btn" onclick="resetFlow()">Restart</button>
+        </div>
+    </div>
+
+</body>
+</html>
